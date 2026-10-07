@@ -1,0 +1,58 @@
+@model string
+
+<h1>@ViewData["Title"]</h1>
+
+<p>Адрес действия: <code>/Echo/@Model</code></p>
+
+<form id="requestForm" data-action="@Model">
+    @if (Model == "Get" || Model == "Post")
+    {
+        <label for="requestMethod">Метод запроса:</label>
+        <select id="requestMethod">
+            <option value="GET" selected="@(Model == "Get")">GET</option>
+            <option value="POST" selected="@(Model == "Post")">POST</option>
+        </select>
+        <p class="hint">Выберите другой метод, чтобы увидеть ответ 405 Method Not Allowed</p>
+    }
+    @if (Model == "Headers")
+    {
+        <label for="headerName">Имя пользовательского заголовка:</label>
+        <input id="headerName" value="X-Student" required />
+        <label for="headerValue">Значение:</label>
+        <input id="headerValue" value="Daniil" />
+    }
+    @if (Model == "Query")
+    {
+        <label for="queryText">Параметры строки запроса:</label>
+        <input id="queryText" value="name=Daniil&amp;age=20" />
+        <p class="hint">Для нескольких значений одного параметра используйте tag=net&amp;tag=mvc</p>
+    }
+    @if (Model == "Body")
+    {
+        <label for="bodyText">Текст для отправки:</label>
+        <textarea id="bodyText" rows="5">Привет, сервер!
+Это тело POST-запроса</textarea>
+    }
+    <button type="submit" id="sendRequest">Отправить запрос</button>
+</form>
+
+<p id="requestError" class="error" role="alert" hidden></p>
+
+<h2>Результат</h2>
+
+<dl class="response-info">
+    <dt>Метод</dt>
+    <dd id="sentMethod">Запрос ещё не отправлен</dd>
+    <dt>Адрес</dt>
+    <dd id="sentUrl">/Echo/@Model</dd>
+    <dt>Статус ответа</dt>
+    <dd id="responseCode">Нет данных</dd>
+    <dt>Content-Type</dt>
+    <dd id="responseType">Нет данных</dd>
+</dl>
+
+<pre id="responseBody" class="preview" aria-live="polite">Здесь появится ответ сервера</pre>
+
+@section Scripts {
+    <script src="~/js/request-demo.js" asp-append-version="true"></script>
+}
